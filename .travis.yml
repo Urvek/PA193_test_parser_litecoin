@@ -1,2 +1,7 @@
-language: C
-compiler: gcc
+language:
+  - C
+compiler:
+    -g++
+os:
+  - windows 
+  
