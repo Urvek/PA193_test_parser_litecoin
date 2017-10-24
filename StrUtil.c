@@ -1,5 +1,5 @@
-#include "CuTest.h"
 #include<string.h>
+#include "CuTest.h"
     
 char* StrToUpper(char* str) {
 	//str = strupr(str);
