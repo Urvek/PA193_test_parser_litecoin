@@ -1,3 +1,5 @@
+// program to parse the litecoin. this program uses the structure of parser defined in blockstructure.h
+// this program is tested for parsing two huge parser blocks and returned the results succesfully
 
 
 #include <sys/stat.h>
@@ -8,13 +10,13 @@
 #include <string.h>
 #include <time.h>
 #include <io.h>
-#include "format.h"
+#include "blockstructure.h"
 #include "parse.h"
 #include "mman.h"
 
-uint32_t blk_cnt = 0;
-enum parse_blk_state p_blk_s = P_BLK_MAGIC;
-enum parse_tx_state p_tx_s = P_TX_VERSION;
+uint32_t blk_cnt = 0;  // variable to store the block count
+enum parse_blk_state p_blk_s = P_BLK_MAGIC; // variable to store magic number
+enum parse_tx_state p_tx_s = P_TX_VERSION;  // variable to store version
 enum parse_txin_state p_txin_s = P_TXIN_PREV_HASH;
 enum parse_txout_state p_txout_s = P_TXOUT_VALUE;
 
@@ -125,7 +127,7 @@ parse_block_print(struct block_structure *b)
 	// Obtain coordinated universal time:   
 	if (err)
 	{
-		printf("Invalid Argument to _gmtime64_s.");
+		printf("Invalid Argument.");
 	}
 
     strftime(timestr, 32, "%Y-%m-%d %H:%M:%S", &tm);
