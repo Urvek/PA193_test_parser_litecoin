@@ -76,6 +76,9 @@ uint8_t parse_varint(uint8_t *p, uint64_t *dest)
     return mv;
 }
 
+/*
+ * Print what we know about a given tx_input
+ */
 void parse_txin_print(struct tx_input *i)
 {
     uint8_t j;
