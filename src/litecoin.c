@@ -148,6 +148,111 @@ void parse_block_print(struct block *b)
     printf("\n");
 }
 
+/*
+ * Parse count tx_inputs from the stream starting at p
+ * Return the number of bytes processed
+ */
+uint64_t parse_txin(uint8_t *src, uint64_t count)
+{
+    uint8_t *p = src;
+    struct tx_input i;
+    uint64_t skip = 0;
+    uint64_t done = 0;
+
+    p_txin_s = P_TXIN_PREV_HASH;
+
+    while (count > 0) {
+
+        p += skip;
+
+        switch (p_txin_s) {
+
+        case P_TXIN_PREV_HASH:
+            memcpy((void *)&i.prev_hash, p, HASH_LEN);
+            skip = HASH_LEN;
+            p_txin_s = P_TXIN_INDEX;
+            break;
+
+        case P_TXIN_INDEX:
+            i.index = *(uint32_t *)p;
+            skip = INDEX_LEN;
+            p_txin_s = P_TXIN_SCRIPT_LEN;
+            break;
+
+        case P_TXIN_SCRIPT_LEN:
+            skip = (uint64_t)parse_varint(p, &(i.script_len));
+            p_txin_s = P_TXIN_SCRIPT;
+            break;
+
+        case P_TXIN_SCRIPT:
+            i.script = p;
+            skip = i.script_len;
+            p_txin_s = P_TXIN_SEQUENCE;
+            break;
+            
+        case P_TXIN_SEQUENCE:
+            i.sequence = *(uint32_t *)p;
+            skip = SEQUENCE_LEN;
+            //parse_txin_print(&i);
+            count--;
+            p_txin_s = P_TXIN_PREV_HASH;
+            break;            
+        default:
+            break;
+        }
+        done += skip;
+    }
+    return done;
+}
+
+/*
+ * Parse count tx_outputs from the stream starting at p
+ * Return the number of bytes processed
+ */
+uint64_t parse_txout(uint8_t *src, uint64_t count)
+{
+    uint8_t *p = src;
+    struct tx_output o;
+    uint64_t skip = 0;
+    uint64_t done = 0;
+
+    p_txout_s = P_TXOUT_VALUE;
+
+    while (count > 0) {
+
+        p += skip;
+
+        switch (p_txout_s) {
+
+        case P_TXOUT_VALUE:
+            o.value = *(uint64_t *)p;
+            skip = VALUE_LEN;
+            p_txout_s = P_TXOUT_SCRIPT_LEN;
+            break;
+
+        case P_TXOUT_SCRIPT_LEN:
+            skip = (uint64_t)parse_varint(p, &(o.script_len));
+            p_txout_s = P_TXOUT_SCRIPT;
+            break;
+
+        case P_TXOUT_SCRIPT:
+            o.script = p;
+            skip = o.script_len;
+            //parse_txout_print(&o);
+            count--;
+            p_txout_s = P_TXOUT_VALUE;
+            break;
+            
+        default:
+            break;
+        }
+
+        done += skip;
+    }
+
+    return done;
+}
+
 
 /*
  * Parse a series of blockchain blocks between p and end
