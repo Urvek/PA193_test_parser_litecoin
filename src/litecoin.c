@@ -10,17 +10,14 @@
 #include <stdlib.h>
 #include <time.h>
 #include <unistd.h>
-#include <io.h> //
 #include "format.h"
 #include "parse.h"
 #include "mman.h" //
 #include "mman.c"//
 #include "SHA256.h"
 #include <openssl/opensslconf.h>
-
 #include <stdlib.h>
 #include <string.h>
-
 #include <openssl/crypto.h>
 #include <openssl/sha.h>
 #include <openssl/opensslv.h>
