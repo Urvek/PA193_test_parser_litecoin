@@ -76,6 +76,74 @@ uint8_t parse_varint(uint8_t *p, uint64_t *dest)
     return mv;
 }
 
+void parse_txin_print(struct tx_input *i)
+{
+    uint8_t j;
+
+    printf("    prev output: ");
+    for (j=HASH_LEN-1; j<HASH_LEN; j--) {
+        printf("%02X", i->prev_hash[j]);
+    }
+    printf("\n");
+    printf("    index: %d\n", i->index);
+    printf("    script len: %lu\n", i->script_len);
+    printf("    sequence: %X\n", i->sequence);
+    printf("\n");
+}
+/*
+ * Print what we know about a given tx_output
+ */
+void parse_txout_print(struct tx_output *o)
+{
+    printf("    value: %lu\n", o->value);
+    printf("    script len: %lu\n", o->script_len);
+    printf("\n");
+}
+/*
+ * Print what we know about a given bitcoin transaction
+ */
+void
+parse_tx_print(struct tx *t)
+{
+    printf("  version: %u\n", t->version);
+    printf("  txin cnt: %lu\n", t->txin_cnt);
+    printf("  txout cnt: %lu\n", t->txout_cnt);
+    printf("  lock time: %u\n", t->lock_time);
+    printf("\n");
+}
+
+/*
+ * Print what we know about a block in the blockchain
+ */
+void parse_block_print(struct block *b)
+{
+    time_t t = b->blk_hash.time;
+    struct tm *tm = gmtime(&t);
+    char timestr[32];
+    uint8_t i;
+    
+    strftime(timestr, 32, "%Y-%m-%d %H:%M:%S", tm);
+
+    printf("magic: 0x%X\n", b->magic);
+    printf("size: %u\n", b->size);
+    printf("version: %u\n", b->blk_hash.version);
+    printf("prev block: ");
+    /* Print the hashes in the correct endianness */
+    for (i=HASH_LEN-1; i<HASH_LEN; i--) {
+        printf("%02X", b->blk_hash.prev_block[i]);
+    }
+    printf("\n");
+    printf("merkle root: ");
+    for (i=HASH_LEN-1; i<HASH_LEN; i--) {
+        printf("%02X", b->blk_hash.merkle_root[i]);
+    }
+    printf("\n");
+    printf("time: %s\n", timestr);
+    printf("bits: %u\n", b->blk_hash.bits);
+    printf("nonce: %u\n", b->blk_hash.nonce);
+    printf("tx count: %lu\n", b->tx_cnt);
+    printf("\n");
+}
 /*
 Generate Hash and create lookup.
 */
