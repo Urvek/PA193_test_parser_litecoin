@@ -13,3 +13,15 @@ enum parse_blk_state {
     P_BLK_TXCNT,
     P_BLK_TX
 };
+enum parse_txout_state {
+    P_TXOUT_VALUE,
+    P_TXOUT_SCRIPT_LEN,
+    P_TXOUT_SCRIPT
+};
+
+#define VAR_INT_2BYTE   0xFD
+#define VAR_INT_4BYTE   0xFE
+#define VAR_INT_8BYTE   0xFF
+
+uint64_t parse(int blkfd, uint64_t sz);
+
