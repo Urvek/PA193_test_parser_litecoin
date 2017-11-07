@@ -30,6 +30,10 @@
 #include <vector>
 #include <byteswap.h>
 
+uint32_t blk_cnt = 0;
+//lookup-Hashmap.
+std::map<std::string, struct BolckHeader> lookup;
+std::map<unsigned int, std::string> blkno_blkhash;
 
 char last_block_hash_str[HASH_LEN*2+1];
 enum parse_blk_state p_blk_s = P_BLK_MAGIC;
