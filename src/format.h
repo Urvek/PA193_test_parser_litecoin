@@ -69,6 +69,27 @@ struct tx_output {
 
     struct tx_output *next;
 };
+/* Describes a litecoin transaction */
+struct tx {
+
+    /* Transaction data format version */
+    uint32_t version;
+
+    /* Number of transaction inputs */
+    uint64_t txin_cnt;
+
+    /* A list of 1 or more transaction inputs or sources for coins */
+    struct tx_input txin;
+
+    /* Number of transaction outputs */
+    uint64_t txout_cnt;
+
+    /* A list of 1 or more transaction outputs or destinations for coins */
+    struct tx_output txout;
+
+    /* Block number or timestamp at which this transaction is locked */
+    uint32_t lock_time;
+};
 
 
 /* Format for a block in a litecoin blockchain */
