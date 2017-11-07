@@ -51,7 +51,24 @@ enum magic_net parse_is_magic(uint32_t m)
     }
     return mn;
 }
+uint64_t parse(int blkfd, uint64_t sz)
+{
+    uint8_t *blk;
+    uint64_t done;
 
+    /* Map the input file */
+    blk = (uint8_t *)mmap(NULL, sz, PROT_READ, MAP_PRIVATE, blkfd, 0);
+
+    /* Process each block in this file */
+    done = parse_block(blk, sz);
+    
+    buildBlockChain();
+
+    /* Drop the mapping */
+    munmap(blk, sz);
+
+    return done;
+}
 void reverse_byte_array(uint8_t *byte_arr,uint8_t *rev_byte_arr,int size){
 	for(int i = 0; i<size;i++){		
 		rev_byte_arr[i] = byte_arr[size-1-i];
