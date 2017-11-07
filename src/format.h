@@ -25,6 +25,32 @@ enum magic_net {
 #define VALUE_LEN       8
 #define SEQUENCE_LEN    4
 #define LOCKTIME_LEN    4
+
+/* Describes an input to a litecoin transaction */
+struct tx_input {
+
+    /* The hash of the previous transaction output */
+    uint8_t prev_hash[HASH_LEN];
+
+    /* The index of the specific output in the previous transaction */
+    uint32_t index;
+
+    /* The length of the signature script */
+    uint64_t script_len;
+
+    /* Computational script for confirming transaction authorization */
+    uint8_t *script;
+
+    /* 
+     * Transaction version as defined by the sender. Intended for replacement
+     * of transactions when information is updated before inclusion into a
+     * block.
+     */
+    uint32_t sequence;
+
+    struct tx_input *next;
+};
+
 /* Format for a block in a litecoin blockchain */
 struct block {
 
