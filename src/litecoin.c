@@ -12,8 +12,6 @@
 #include <unistd.h>
 #include "format.h"
 #include "parse.h"
-#include "mman.h" //
-#include "mman.c"//
 #include "SHA256.h"
 #include <openssl/opensslconf.h>
 #include <stdlib.h>
@@ -32,8 +30,8 @@
 
 uint32_t blk_cnt = 0;
 //lookup-Hashmap.
-std::map<std::string, struct BolckHeader> lookup;
-std::map<unsigned int, std::string> blkno_blkhash;
+std::map<std::string, struct BolckHeader> lookup_new;
+std::map<unsigned int, std::string> blkno_blkhash_new;
 
 char last_block_hash_str[HASH_LEN*2+1];
 enum parse_blk_state p_blk_s = P_BLK_MAGIC;
