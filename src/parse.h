@@ -1,3 +1,4 @@
+
 #ifndef PARSE_H_
 #define PARSE_H_
 
@@ -19,9 +20,27 @@ enum parse_txout_state {
     P_TXOUT_SCRIPT
 };
 
+enum parse_tx_state {
+    P_TX_VERSION,
+    P_TX_TXIN_CNT,
+    P_TX_TXIN,
+    P_TX_TXOUT_CNT,
+    P_TX_TXOUT,
+    P_TX_LOCKTIME
+};
+
+enum parse_txin_state {
+    P_TXIN_PREV_HASH,
+    P_TXIN_INDEX,
+    P_TXIN_SCRIPT_LEN,
+    P_TXIN_SCRIPT,
+    P_TXIN_SEQUENCE
+};
+
 #define VAR_INT_2BYTE   0xFD
 #define VAR_INT_4BYTE   0xFE
 #define VAR_INT_8BYTE   0xFF
 
 uint64_t parse(int blkfd, uint64_t sz);
 
+#endif
