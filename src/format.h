@@ -51,6 +51,26 @@ struct tx_input {
     struct tx_input *next;
 };
 
+
+/* Describes an output from a litecoin transaction */
+struct tx_output {
+
+    /* Transaction value */
+    uint64_t value;
+
+    /* Length of the pk_script */
+    uint64_t script_len;
+
+    /*
+     * Usually contains the public key as a litecoin script setting up
+     * conditions to claim this output.
+     */
+    uint8_t *script;
+
+    struct tx_output *next;
+};
+
+
 /* Format for a block in a litecoin blockchain */
 struct block {
 
