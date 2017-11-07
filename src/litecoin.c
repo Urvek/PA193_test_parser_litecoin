@@ -10,6 +10,29 @@
 #include <stdlib.h>
 #include <time.h>
 #include <unistd.h>
+#include <io.h> //
+#include "format.h"
+#include "parse.h"
+#include "mman.h" //
+#include "mman.c"//
+#include "SHA256.h"
+#include <openssl/opensslconf.h>
+
+#include <stdlib.h>
+#include <string.h>
+
+#include <openssl/crypto.h>
+#include <openssl/sha.h>
+#include <openssl/opensslv.h>
+#include <array>
+#include <map>
+#include <iostream>
+#include <algorithm>
+#include <string>
+#include <cassert>
+#include <vector>
+#include <byteswap.h>
+
 
 char last_block_hash_str[HASH_LEN*2+1];
 enum parse_blk_state p_blk_s = P_BLK_MAGIC;
