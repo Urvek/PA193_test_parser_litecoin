@@ -70,5 +70,11 @@ struct block_header_hash {
      */
     uint32_t nonce;    
 };
+struct BolckHeader {
+	uint32_t blk_cnt;
+	uint8_t *fph;
+	uint32_t file_offset;
+	uint8_t prev_block_hash[HASH_LEN];
+};
 
 #endif
