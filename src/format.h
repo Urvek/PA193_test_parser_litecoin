@@ -45,5 +45,30 @@ struct block {
 
 };
     
+struct block_header_hash {
+	/* Block version info based on software version that created this block */
+    uint32_t version;
+
+    /* Hash value of the previous block this block references */
+    uint8_t prev_block[HASH_LEN];
+
+    /* 
+     * Reference to a Merkle tree collection (hash of all transactions related
+     * to this block) 
+     */
+    uint8_t merkle_root[HASH_LEN];
+
+    /* Unix timestamp (32-bit) for when this block was created */
+    uint32_t time;
+
+    /* Calculated difficulty target being used for this block */
+    uint32_t bits;
+
+    /* 
+     * Nonce used to generate this block to allow variations of the header and
+     * compute different hashes
+     */
+    uint32_t nonce;    
+};
 
 #endif
