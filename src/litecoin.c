@@ -255,6 +255,72 @@ uint64_t parse_txout(uint8_t *src, uint64_t count)
 
 
 /*
+ * Parse count transactions from the stream starting at p
+ * Return number of bytes processed
+ */
+uint64_t parse_tx(uint8_t *src, uint64_t count)
+{
+    uint8_t *p = src;
+    struct tx t;
+    uint64_t skip = 0;
+    uint64_t done = 0;
+
+    p_tx_s = P_TX_VERSION;
+
+    while (count > 0) {
+
+        p += skip;
+
+        switch (p_tx_s) {
+
+        case P_TX_VERSION:
+            t.version = *(uint32_t *)p;
+            skip = VERSION_LEN;
+            p_tx_s = P_TX_TXIN_CNT;
+            break;
+
+        case P_TX_TXIN_CNT:
+            skip = (uint64_t)parse_varint(p, &(t.txin_cnt));
+            p_tx_s = P_TX_TXIN;
+            break;
+
+        case P_TX_TXIN:
+            /* Process each input in this transaction */
+            skip = parse_txin(p, t.txin_cnt);
+            p_tx_s = P_TX_TXOUT_CNT;
+            break;
+
+        case P_TX_TXOUT_CNT:
+            skip = (uint64_t)parse_varint(p, &(t.txout_cnt));
+            p_tx_s = P_TX_TXOUT;
+            break;
+
+        case P_TX_TXOUT:
+            /* Process each output in this transaction */
+            skip = parse_txout(p, t.txout_cnt);
+            p_tx_s = P_TX_LOCKTIME;
+            break;
+
+        case P_TX_LOCKTIME:
+            t.lock_time = *(uint32_t *)p;
+            skip = LOCKTIME_LEN;
+            //parse_tx_print(&t);
+            count--;
+            p_tx_s = P_TX_VERSION;
+            break;
+
+        default:
+            break;
+        }
+
+        done += skip;
+    }
+    return done;
+}
+
+
+
+/*
  * Parse a series of blockchain blocks between p and end
  * Return the number of bytes processed
  */
