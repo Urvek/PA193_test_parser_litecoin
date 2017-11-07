@@ -53,6 +53,30 @@ enum magic_net parse_is_magic(uint32_t m)
     return mn;
 }
 
+/*
+Generate Hash and create lookup.
+*/
+uint64_t create_block_lookup(struct block_header_hash blk_hdr, struct BolckHeader bh){
+	uint64_t done = 0;
+	uint8_t block_hash[HASH_LEN],rev_block_hash[HASH_LEN];	
+	computeSHA256((uint8_t*)&blk_hdr,sizeof(struct block_header_hash),block_hash);
+	computeSHA256(block_hash,32,block_hash);
+	
+	reverse_byte_array(block_hash,rev_block_hash,HASH_LEN);
+	for(int i=0;i<HASH_LEN;i++){
+		sprintf(last_block_hash_str+i*2,"%02x",rev_block_hash[i]);
+	}
+	last_block_hash_str[HASH_LEN*2]=0;
+	
+	printf("%s\n",last_block_hash_str);
+	//getchar();
+			
+	lookup_map.insert(std::pair<std::string, struct BolckHeader>(last_block_hash_str,bh));
+
+	blkno_blkhash_map.insert(std::pair<unsigned int, std::string>(bh.blk_cnt,last_block_hash_str));
+	return done;
+}
+
 void buildBlockChain(){
 	char block_hash_str[HASH_LEN*2+1];
 	
