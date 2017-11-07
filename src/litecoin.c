@@ -77,7 +77,7 @@ uint8_t parse_varint(uint8_t *p, uint64_t *dest)
 }
 
 /*
- * Print what we know about a given tx_input
+ * Print what we know about a given transaction input
  */
 void parse_txin_print(struct tx_input *i)
 {
@@ -94,7 +94,7 @@ void parse_txin_print(struct tx_input *i)
     printf("\n");
 }
 /*
- * Print what we know about a given tx_output
+ * Print what we know about a given transaction output
  */
 void parse_txout_print(struct tx_output *o)
 {
@@ -103,7 +103,7 @@ void parse_txout_print(struct tx_output *o)
     printf("\n");
 }
 /*
- * Print what we know about a given bitcoin transaction
+ * Print what we know about a given Litecoin transaction
  */
 void
 parse_tx_print(struct tx *t)
@@ -324,110 +324,6 @@ uint64_t parse_tx(uint8_t *src, uint64_t count)
  * Parse a series of blockchain blocks between p and end
  * Return the number of bytes processed
  */
-uint64_t parse_block(uint8_t *src, uint64_t sz)
-{
-    uint8_t *p = src;
-    struct block b;
-    uint64_t skip = 0;
-    uint64_t done = 0;
-    uint64_t byte_count = 0;
-    struct BolckHeader bh;
-
-    /* Look for different patterns depending on our state */
-    while (sz > skip) {
-
-        p += skip;
-        sz -= skip;
-        byte_count += skip;
-		
-        switch (p_blk_s) {
-
-        /* Look for the magic number */
-        case P_BLK_MAGIC:
-            /* Check for magic number */
-            b.magic = *((uint32_t *)p);
-
-            /* If blk[i] starts the magic bytes, we can skip ahead */
-            if (parse_is_magic(b.magic) != MAGIC_NET_NONE) {
-                skip = MAGIC_LEN;
-                p_blk_s = P_BLK_SZ;
-
-            /* No magic number at this byte, check the next one */
-            } else {
-                skip = 1;                               
-            }
-            break;
-
-        case P_BLK_SZ:
-            b.size = *(uint32_t *)p;
-            skip = BLKSZ_LEN;
-            p_blk_s = P_BLK_VERSION;
-            break;
-
-        case P_BLK_VERSION:        	
-            b.blk_hash.version = *(uint32_t *)p;
-            skip = VERSION_LEN;
-            p_blk_s = P_BLK_PREV;
-            break;
-
-        case P_BLK_PREV:
-            memcpy((void *)&b.blk_hash.prev_block, p, HASH_LEN);
-            skip = HASH_LEN;
-            p_blk_s = P_BLK_MERKLE;
-            break;
-
-        case P_BLK_MERKLE:
-            memcpy((void *)&b.blk_hash.merkle_root, p, HASH_LEN);
-            skip = HASH_LEN;
-            p_blk_s = P_BLK_TIME;
-            break;
-
-        case P_BLK_TIME:
-            b.blk_hash.time = *(uint32_t *)p;
-            skip = TIME_LEN;
-            p_blk_s = P_BLK_BITS;
-            break;
-
-        case P_BLK_BITS:
-            b.blk_hash.bits = *(uint32_t *)p;
-            skip = DIFFICULTY_LEN;
-            p_blk_s = P_BLK_NONCE;
-            break;
-
-        case P_BLK_NONCE:
-            b.blk_hash.nonce = *(uint32_t *)p;
-            skip = NONCE_LEN;
-            p_blk_s = P_BLK_TXCNT;
-            bh.fph = src;
-            //doubt for byte_count----------
-            bh.file_offset = byte_count;
-            reverse_byte_array(b.blk_hash.prev_block,bh.prev_block_hash,HASH_LEN);
-            reverse_byte_array(b.blk_hash.prev_block,bh.prev_block_hash,HASH_LEN);
-            //memcpy((void *)&bh.prev_block_hash, &b.blk_hash.prev_block, HASH_LEN);
-            bh.blk_cnt = blk_cnt++;
-            create_block_lookup(b.blk_hash,bh);            
-            break;
-
-        case P_BLK_TXCNT:
-            skip = (uint64_t)parse_varint(p, &(b.tx_cnt));
-            p_blk_s = P_BLK_TX;
-            break;
-
-        case P_BLK_TX:
-            /* Process each transaction in this block */
-            skip = parse_tx(p, b.tx_cnt);
-            //printf("block: %d\n", blk_cnt++);
-            //parse_block_print(&b); //by hitesh
-            p_blk_s = P_BLK_MAGIC;
-            break;
-            
-        default:
-            break;
-        }
-        done += skip;
-    }
-    return done;
-}
 
 /*
 Generate Hash and create lookup.
