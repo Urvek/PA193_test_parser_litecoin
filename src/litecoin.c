@@ -321,7 +321,7 @@ uint64_t parse_tx(uint8_t *src, uint64_t count)
 
 
 /*
- * Parse a series of blockchain blocks between p and end
+ * Parsing of block
  * Return the number of bytes processed
  */
 
