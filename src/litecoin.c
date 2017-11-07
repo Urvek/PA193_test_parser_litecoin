@@ -54,6 +54,29 @@ enum magic_net parse_is_magic(uint32_t m)
 }
 
 /*
+ * Process a var_int starting at p into dest
+ */
+uint8_t parse_varint(uint8_t *p, uint64_t *dest)
+{
+    uint8_t varint = *p;
+    uint8_t mv = 1;
+    if (varint < VAR_INT_2BYTE) {
+        *dest = (uint64_t)varint;
+    } else if (varint == VAR_INT_2BYTE) {
+        *dest = (uint64_t)( *(uint16_t *)(p+1) );
+        mv += 2;
+    } else if (varint == VAR_INT_4BYTE) {
+        *dest = (uint64_t)( *(uint32_t *)(p+1) );
+        mv += 4;
+    } else if (varint == VAR_INT_8BYTE) {
+        *dest = (uint64_t)( *(uint64_t *)(p+1) );
+        mv += 8;
+    }
+
+    return mv;
+}
+
+/*
 Generate Hash and create lookup.
 */
 uint64_t create_block_lookup(struct block_header_hash blk_hdr, struct BolckHeader bh){
