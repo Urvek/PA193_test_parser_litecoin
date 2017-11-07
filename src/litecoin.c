@@ -39,3 +39,14 @@ enum parse_blk_state p_blk_s = P_BLK_MAGIC;
 enum parse_tx_state p_tx_s = P_TX_VERSION;
 enum parse_txin_state p_txin_s = P_TXIN_PREV_HASH;
 enum parse_txout_state p_txout_s = P_TXOUT_VALUE;
+
+enum magic_net parse_is_magic(uint32_t m)
+{
+	enum magic_net mn = MAGIC_NET_NONE;
+	if (m == MAGIC_MAIN) {
+        mn = MAGIC_NET_MAIN;
+    } else if (m == MAGIC_TESTNET) {
+        mn = MAGIC_NET_TESTNET;
+    }
+    return mn;
+}
