@@ -21,6 +21,7 @@
 #include <iostream>
 #include <algorithm>
 #include <string>
+
 #include <cassert>
 #include <vector>
 #include <byteswap.h>
@@ -51,6 +52,58 @@ enum magic_net parse_is_magic(uint32_t m)
     }
     return mn;
 }
+
+void buildBlockChain(){
+	char block_hash_str[HASH_LEN*2+1];
+	
+	std::vector<struct BolckHeader> chain;
+	std::vector<unsigned int> temp;
+	strcpy(block_hash_str,last_block_hash_str);
+	printf("Building full block-chain.\n");
+		
+	std::map<std::string, struct BolckHeader>::iterator lookup_itr;
+	std::map<unsigned int, std::string>::iterator itr;
+	for ( itr = blkno_blkhash_map.end(); itr != blkno_blkhash_map.begin(); itr-- )
+	{
+		std::cout << itr->first << ':' << itr->second << std::endl ;
+		if(std::find(temp.begin(), temp.end(), itr->first)!=temp.end()){
+      		continue;
+		}
+		temp.push_back(itr->first);
+		if(itr->first==33419) continue;
+		strcpy(block_hash_str,itr->second.c_str());
+		while(true){
+			lookup_itr = lookup_map.find(block_hash_str);
+			if (lookup_itr != lookup_map.end()){
+				printf("found!!!\n");
+				struct BolckHeader bh = ((struct BolckHeader)lookup_itr->second);
+				//push it in chain.
+				chain.push_back(bh);
+				//push block count in temp.
+				temp.push_back(bh.blk_cnt);
+				for(int i=0;i<HASH_LEN;i++){
+					sprintf(block_hash_str+i*2,"%02x",bh.prev_block_hash[i]);
+				}
+				block_hash_str[HASH_LEN*2]=0;
+				int ret = strcmp(block_hash_str,"0000000000000000000000000000000000000000000000000000000000000000");
+				if(ret==0){
+					printf("Genesis block found!!!");
+					break;
+				}				
+			}else{	
+				printf("Not found!!!\n");		
+				break;
+			}
+    	}
+    	getchar();
+    	for (std::vector<struct BolckHeader>::iterator it = chain.begin() ; it != chain.end(); ++it){
+			std::cout << (*it).blk_cnt<< ' ';
+		}
+    	std::cout << std::endl;
+    	chain.clear();
+	}
+}
+
 uint64_t parse(int blkfd, uint64_t sz)
 {
     uint8_t *blk;
@@ -69,6 +122,7 @@ uint64_t parse(int blkfd, uint64_t sz)
 
     return done;
 }
+
 void reverse_byte_array(uint8_t *byte_arr,uint8_t *rev_byte_arr,int size){
 	for(int i = 0; i<size;i++){		
 		rev_byte_arr[i] = byte_arr[size-1-i];
