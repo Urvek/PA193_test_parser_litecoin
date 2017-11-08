@@ -54,7 +54,7 @@ enum magic_net parse_is_magic(uint32_t m)
     return mn;
 }
 
-// variable integer for storing the transactions
+// variable integer for storing the transaction counter
 
 uint8_t parse_varint(uint8_t *p, uint64_t *dest)
 {
@@ -76,9 +76,8 @@ uint8_t parse_varint(uint8_t *p, uint64_t *dest)
     return mv;
 }
 
-/*
- * Print what we know about a given transaction input
- */
+// Printing the transaction input. It contains hash of previous transaction , index ,script length
+
 void parse_txin_print(struct tx_input *i)
 {
     uint8_t j;
@@ -93,18 +92,17 @@ void parse_txin_print(struct tx_input *i)
     printf("    sequence: %X\n", i->sequence);
     printf("\n");
 }
-/*
- * Print what we know about a given transaction output
- */
+
+// Printing  the transaction output. it contains the transaction value , output script and script length.
+
 void parse_txout_print(struct tx_output *o)
 {
     printf("    value: %lu\n", o->value);
     printf("    script len: %lu\n", o->script_len);
     printf("\n");
 }
-/*
- * Print what we know about a given Litecoin transaction
- */
+
+// printing the transaction structure in the block
 void
 parse_tx_print(struct tx *t)
 {
@@ -115,9 +113,8 @@ parse_tx_print(struct tx *t)
     printf("\n");
 }
 
-/*
- * Print what we know about a block in the blockchain
- */
+// Printing the block structure. it contains the magic number, block length , block header, txn counter and transaction structure
+
 void parse_block_print(struct block *b)
 {
     time_t t = b->blk_hash.time;
@@ -127,11 +124,14 @@ void parse_block_print(struct block *b)
     
     strftime(timestr, 32, "%Y-%m-%d %H:%M:%S", tm);
 
-    printf("magic: 0x%X\n", b->magic);
-    printf("size: %u\n", b->size);
-    printf("version: %u\n", b->blk_hash.version);
-    printf("prev block: ");
-    /* Print the hashes in the correct endianness */
+    printf("magic: 0x%X\n", b->magic);  // printing the magic number
+    printf("size: %u\n", b->size);     // printing the block size
+
+	// printing the block header
+	
+    printf("version: %u\n", b->blk_hash.version);  // version
+    printf("prev block: ");  // hash of previous block
+   
     for (i=HASH_LEN-1; i<HASH_LEN; i--) {
         printf("%02X", b->blk_hash.prev_block[i]);
     }
