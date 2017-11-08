@@ -136,22 +136,23 @@ void parse_block_print(struct block *b)
         printf("%02X", b->blk_hash.prev_block[i]);
     }
     printf("\n");
-    printf("merkle root: ");
+    printf("merkle root: ");   // merkle root
     for (i=HASH_LEN-1; i<HASH_LEN; i--) {
         printf("%02X", b->blk_hash.merkle_root[i]);
     }
     printf("\n");
-    printf("time: %s\n", timestr);
-    printf("bits: %u\n", b->blk_hash.bits);
-    printf("nonce: %u\n", b->blk_hash.nonce);
-    printf("tx count: %lu\n", b->tx_cnt);
+    printf("time: %s\n", timestr);   // timestamp
+    printf("bits: %u\n", b->blk_hash.bits);  // target or difficulity level
+    printf("nonce: %u\n", b->blk_hash.nonce);  // nonce
+	
+    // end of printing block header
+	
+    printf("tx count: %lu\n", b->tx_cnt);    // transaction count
     printf("\n");
 }
 
-/*
- * Parse count tx_inputs from the stream starting at p
- * Return the number of bytes processed
- */
+// printing the transaction input structure. It contains  previous hash of transaction 
+
 uint64_t parse_txin(uint8_t *src, uint64_t count)
 {
     uint8_t *p = src;
