@@ -28,8 +28,8 @@
 
 uint32_t blk_cnt = 0;
 //lookup-Hashmap.
-std::map<std::string, struct BolckHeader> lookup_new;
-std::map<unsigned int, std::string> blkno_blkhash_new;
+std::map<std::string, struct BolckHeader> lookup_map;
+std::map<unsigned int, std::string> blkno_blkhash_map;
 char last_block_hash_str[HASH_LEN*2+1];
 enum parse_blk_state p_blk_s = P_BLK_MAGIC;
 enum parse_tx_state p_tx_s = P_TX_VERSION;
