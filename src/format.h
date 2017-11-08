@@ -91,27 +91,6 @@ struct tx {
     uint32_t lock_time;
 };
 
-
-/* Format for a block in a litecoin blockchain */
-struct block {
-
-    /* Magic number */
-    uint32_t magic;
-
-    /* Length of the entire block */
-    uint32_t size;
-    
-	struct block_header_hash blk_hash;
-    /* 
-     * Number of transaction entries
-     */
-    uint64_t tx_cnt;
-
-    /* Transactions */
-    struct tx *tx_list;
-
-};
-    
 struct block_header_hash {
 	/* Block version info based on software version that created this block */
     uint32_t version;
@@ -137,6 +116,28 @@ struct block_header_hash {
      */
     uint32_t nonce;    
 };
+
+/* Format for a block in a litecoin blockchain */
+struct block {
+
+    /* Magic number */
+    uint32_t magic;
+
+    /* Length of the entire block */
+    uint32_t size;
+    
+	struct block_header_hash blk_hash;
+    /* 
+     * Number of transaction entries
+     */
+    uint64_t tx_cnt;
+
+    /* Transactions */
+    struct tx *tx_list;
+
+};
+    
+
 struct BolckHeader {
 	uint32_t blk_cnt;
 	uint8_t *fph;
