@@ -1,3 +1,5 @@
+// Program to parse the Litecoin block , building the Litecoin Block Chain and  Validation of same
+
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -38,9 +40,8 @@ enum parse_txout_state p_txout_s = P_TXOUT_VALUE;
 //function prototype
 void reverse_byte_array(uint8_t *byte_arr,uint8_t *rev_byte_arr,int size);
 uint64_t create_block_lookup(struct block_header_hash blk_hdr, struct BolckHeader bh);
-/*
- * Map the magic number into network enumeration
- */
+
+// enumeration of Magic Number
 
 enum magic_net parse_is_magic(uint32_t m)
 {
@@ -53,9 +54,8 @@ enum magic_net parse_is_magic(uint32_t m)
     return mn;
 }
 
-/*
- * Process a var_int starting at p into dest
- */
+// variable integer for storing the transactions
+
 uint8_t parse_varint(uint8_t *p, uint64_t *dest)
 {
     uint8_t varint = *p;
