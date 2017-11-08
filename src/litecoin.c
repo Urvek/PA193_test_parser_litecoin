@@ -528,3 +528,4 @@ void reverse_byte_array(uint8_t *byte_arr,uint8_t *rev_byte_arr,int size){
 	for(int i = 0; i<size;i++){		
 		rev_byte_arr[i] = byte_arr[size-1-i];
 	}
+}
