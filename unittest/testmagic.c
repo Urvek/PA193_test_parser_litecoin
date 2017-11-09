@@ -32,18 +32,22 @@ enum magic_net parse_is_magic(uint32_t m)
     return mn;
 }
 
-void parse_block_print(struct block *b)
+int testmagicnum(struct block *b)
 {
-    
+    int flag=0;
     uint8_t i;
-    uint32_t expectedmagic;
-    uint32_t actualmagic;
+    uint32_t expectedmagic = 0xDBB6C0FB;
+    uint32_t actualmagic = b->magic;
     
-    printf("Actual magic: 0x%X\n", b->magic);
-    //printf("Expected magic: 0x%X\n", b->magic);
+     printf("Actual magic: 0x%X\n", b->magic);
+    printf("Expected magic: 0x%X\n", expectedmagic);
+    if(actualmagic==expectedmagic)
+     { 
+      flag=1;
+	 }
     printf("\n ");
+    return flag;
     
-    //printf("magic: 0x%X\n", b->magic);
 }
 uint64_t parse_block(uint8_t *src, uint64_t sz)
 {
@@ -53,7 +57,7 @@ uint64_t parse_block(uint8_t *src, uint64_t sz)
     uint64_t done = 0;
     uint64_t byte_count = 0;
     struct BolckHeader bh;
-
+    int flagtest;
     /* Look for different patterns depending on our state */
     while (sz > skip) 
 	{
@@ -63,7 +67,8 @@ uint64_t parse_block(uint8_t *src, uint64_t sz)
         byte_count += skip;
 		b.magic = *((uint32_t *)p);
 		if (parse_is_magic(b.magic) != MAGIC_NET_NONE) 
-		{
+		{       flagtest= testmagicnum(&b);
+		      
                 skip = MAGIC_LEN;
                 p_blk_s = P_BLK_SZ;
 
@@ -75,8 +80,10 @@ uint64_t parse_block(uint8_t *src, uint64_t sz)
             }
         done += skip;
     }
-
+     if (flagtest)
+        printf("\n TEST FOR MAGIC NUMBER FOR  ALL BLOCKs PASSED\n");
     return done;
+    
 }
 
 uint64_t parse(int blkfd, uint64_t sz)
@@ -89,8 +96,8 @@ uint64_t parse(int blkfd, uint64_t sz)
 
     /* Process each block in this file */
     done = parse_block(blk, sz);
-    if(done)
-    parse_block_print(&blk);
+    
+    
 }
     
 int main(int argc, char *argv[])
