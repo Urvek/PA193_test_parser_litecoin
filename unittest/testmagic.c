@@ -80,7 +80,7 @@ uint64_t parse_block(uint8_t *src, uint64_t sz)
         byte_count += skip;
 		b.magic = *((uint32_t *)p);
 		if (parse_is_magic(b.magic) != MAGIC_NET_NONE)    // if magic number is there
-		{       flagtest= testmagicnum(&b);
+		{       flagtest= testmagicnum(&b);               // calling the test function
 		      
                 skip = MAGIC_LEN;
                 p_blk_s = P_BLK_SZ;
@@ -93,8 +93,9 @@ uint64_t parse_block(uint8_t *src, uint64_t sz)
             }
         done += skip;
     }
-     if (flagtest)
-        printf("\n TEST FOR MAGIC NUMBER FOR  ALL BLOCKs PASSED\n");
+     if (flagtest)                 // checking the test results. the variable flagtest will be 1 only when expected magic number 
+	                           // is equal to actual magic number in all blocks
+        printf("\n TEST FOR MAGIC NUMBER FOR  ALL BLOCKS PASSED\n");
     return done;
     
 }
@@ -112,7 +113,8 @@ uint64_t parse(int blkfd, uint64_t sz)
     
     
 }
-    
+
+// Main program
 int main(int argc, char *argv[])
 {
     DIR *datadir = NULL;
@@ -140,13 +142,7 @@ int main(int argc, char *argv[])
                 if (dp != NULL) {
                     if (memcmp(dp->d_name, "blk", 3) == 0) {
                         
-                        /* 
-                         * NOTE: We are not bothering to sort by filename because we
-                         * assume the blockchain files have ascending inode numbers due
-                         * to the way they were created. Other sources may require more
-                         * sorting.
-                         */
-                        /* printf("%d\n", dp->d_ino); */
+  
 
                         fd = open(dp->d_name, O_RDONLY);
                         if (fd < 0) {
