@@ -143,6 +143,10 @@ struct BolckHeader {
 	uint8_t *fph;
 	uint32_t file_offset;
 	uint8_t prev_block_hash[HASH_LEN];
+	//Added for transction.
+	uint8_t merkle_root[HASH_LEN];
+	uint8_t cal_merkle_root[HASH_LEN];
+	uint8_t is_valid = -1;
 };
 
 #endif
