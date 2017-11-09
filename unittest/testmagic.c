@@ -1,4 +1,5 @@
 // TEST CASE FOR MAGIC NUMBER
+// This program is test case for Magic Number such that it will test the magic numbers of all blocks in block chain
 
 #include <sys/mman.h>
 #include <sys/stat.h>
@@ -17,6 +18,9 @@
 #include <stdlib.h>
 #include <string.h>
 enum parse_blk_state p_blk_s = P_BLK_MAGIC;
+
+// enumerating the magic number
+
 enum magic_net parse_is_magic(uint32_t m)
 {
 	enum magic_net mn = MAGIC_NET_NONE;
@@ -31,6 +35,10 @@ enum magic_net parse_is_magic(uint32_t m)
     }
     return mn;
 }
+
+// testing the magic number. Here we are checking the magic number of each block
+// Magic number obtained after parsing is Actual Magic Number
+// It is compared asgainst actual magic number of Litecoin ( 0xDBB6C0FB)
 
 int testmagicnum(struct block *b)
 {
@@ -49,6 +57,11 @@ int testmagicnum(struct block *b)
     return flag;
     
 }
+
+// parsing the block for finding the magic number
+// Here , we will first check whether the block has Magic Number or not
+// If , it is having then we are comparing it actual Magic number
+
 uint64_t parse_block(uint8_t *src, uint64_t sz)
 {
     uint8_t *p = src;
@@ -58,7 +71,7 @@ uint64_t parse_block(uint8_t *src, uint64_t sz)
     uint64_t byte_count = 0;
     struct BolckHeader bh;
     int flagtest;
-    /* Look for different patterns depending on our state */
+    
     while (sz > skip) 
 	{
 
@@ -66,7 +79,7 @@ uint64_t parse_block(uint8_t *src, uint64_t sz)
         sz -= skip;
         byte_count += skip;
 		b.magic = *((uint32_t *)p);
-		if (parse_is_magic(b.magic) != MAGIC_NET_NONE) 
+		if (parse_is_magic(b.magic) != MAGIC_NET_NONE)    // if magic number is there
 		{       flagtest= testmagicnum(&b);
 		      
                 skip = MAGIC_LEN;
