@@ -1,5 +1,3 @@
-// program to parse the litecoin block and validate block chain
-
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -45,9 +43,9 @@ enum parse_txout_state p_txout_s = P_TXOUT_VALUE;
 void reverse_byte_array(uint8_t *byte_arr,uint8_t *rev_byte_arr,int size);
 
 int validate_merkle_root();
-
-// enumerating the magic number 
-
+/*
+ * Map the magic number into network enumeration
+ */
 enum magic_net
 parse_is_magic(uint32_t m)
 {
@@ -84,8 +82,9 @@ parse_varint(uint8_t *p, uint64_t *dest)
     return mv;
 }
 
-// printing the transaction input structre.
-
+/*
+ * Print what we know about a given tx_input
+ */
 void
 parse_txin_print(struct tx_input *i)
 {
@@ -101,8 +100,9 @@ parse_txin_print(struct tx_input *i)
     printf("    sequence: %X\n", i->sequence);
     printf("\n");
 }
-// printing the transaction output stucture
-
+/*
+ * Print what we know about a given tx_output
+ */
 void
 parse_txout_print(struct tx_output *o)
 {
@@ -110,8 +110,9 @@ parse_txout_print(struct tx_output *o)
     printf("    script len: %lu\n", o->script_len);
     printf("\n");
 }
-// printing the transaction structure
-
+/*
+ * Print what we know about a given bitcoin transaction
+ */
 void
 parse_tx_print(struct tx *t)
 {
@@ -122,8 +123,9 @@ parse_tx_print(struct tx *t)
     printf("\n");
 }
 
-// printing the block structure
-
+/*
+ * Print what we know about a block in the blockchain
+ */
 void
 parse_block_print(struct block *b)
 {
@@ -155,8 +157,10 @@ parse_block_print(struct block *b)
     printf("\n");
 }
 
-// parsing the transaction inputs
-
+/*
+ * Parse count tx_inputs from the stream starting at p
+ * Return the number of bytes processed
+ */
 uint64_t
 parse_txin(uint8_t *src, uint64_t count)
 {
@@ -214,8 +218,10 @@ parse_txin(uint8_t *src, uint64_t count)
     return done;
 }
 
-// parsing the transaction output
-
+/*
+ * Parse count tx_outputs from the stream starting at p
+ * Return the number of bytes processed
+ */
 uint64_t
 parse_txout(uint8_t *src, uint64_t count)
 {
@@ -260,8 +266,10 @@ parse_txout(uint8_t *src, uint64_t count)
 
     return done;
 }
-// parsing the transaction structure
-
+/*
+ * Parse count transactions from the stream starting at p
+ * Return number of bytes processed
+ */
 uint64_t
 parse_tx(uint8_t *src, uint64_t count, struct BolckHeader *bhp)
 {
@@ -414,14 +422,12 @@ parse_tx(uint8_t *src, uint64_t count, struct BolckHeader *bhp)
 	}	
     return done;
 }
-
-// creating a block look up
-
 uint64_t
 create_block_lookup(struct block_header_hash blk_hdr, struct BolckHeader bh);
-
-// parsing the block structure
-
+/*
+ * Parse a series of blockchain blocks between p and end
+ * Return the number of bytes processed
+ */
 uint64_t
 parse_block(uint8_t *src, uint64_t sz)
 {
@@ -558,8 +564,6 @@ create_block_lookup(struct block_header_hash blk_hdr, struct BolckHeader bh){
 	blkno_blkhash_map.insert(std::pair<unsigned int, std::string>(bh.blk_cnt,last_block_hash_str));
 	return done;
 }
-
-// building the block chain
 
 void buildBlockChain(){
 	FILE *bfp,*mfp; 
