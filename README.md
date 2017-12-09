@@ -19,4 +19,7 @@ Task:
 5. Vulnerability testing
 6. Bug Fixing
 
+# Useful links
+* [litecoin official information site] (https://litecoin.info/)
+* [Block chain parsing- Best guide] (http://codesuppository.blogspot.cz/2014/01/how-to-parse-bitcoin-blockchain.html)
 
