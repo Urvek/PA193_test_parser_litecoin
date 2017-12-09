@@ -4,6 +4,9 @@ This is the repository for test parser of litecoin cryptocurrency. We have devpl
 Download source from release
 cd src
 make
+
+Note: Test block can be obtain from litecoin core client. Test block blk00000.dat is of 127MB size.
+Due to github upload limitation of 25MB file, it is not included into repository 
 ```
 Contributors:
 1. Urvekkumar C Shah
