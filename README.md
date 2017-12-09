@@ -6,10 +6,10 @@ cd src
 make
 ```
 Contributors:
-Urvekkumar C Shah
-Hitesh Lilhare
-Vikas Lamba
-Akhileshkumar Soni
+1. Urvekkumar C Shah
+2. Hitesh Lilhare
+3. Vikas Lamba
+4. Akhileshkumar Soni
 
 Task:
 1. Identification of block structure of litecoin
