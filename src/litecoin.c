@@ -91,7 +91,7 @@ parse_txin_print(struct tx_input *i)
     uint8_t j;
 
     printf("    prev output: ");
-    for (j=HASH_LEN-1; j<HASH_LEN; j--) {
+    for (j=HASH_LEN-1; j>0; j--) {
         printf("%02X", i->prev_hash[j]);
     }
     printf("\n");
